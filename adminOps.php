@@ -2,7 +2,41 @@
 <html>
 	<head>
 		<title>adminOps</title>
+	<style> 
+			Body {
+				font-family: Calibri, Helvetica, sans-serif;
+				background-color: white;
+			}
+			form { 
+				border: 3px solid #f1f1f1; 
+			}
+			input[type=text] { 
+				width: 100%; 
+				margin: 8px 0;
+				padding: 12px 20px; 
+				display: inline-block; 
+				border: 2px solid green; 
+				box-sizing: border-box; 
+			}
+			input[type=submit] { 
+				background-color: #4CAF50; 
+				width: 100%;
+				color: white; 
+				padding: 15px; 
+				margin: 10px 0px; 
+				border: none; 
+				cursor: pointer; 
+			}
+			input[type=submit]:hover { 
+				opacity: 0.7; 
+			}	
+			.container { 
+				padding: 25px; 
+				background-color: lightblue;
+			}
+		</style>
 	</head>
+	<h1> CS Course Management System </h1>
 	<body>
 		<?php
 
@@ -212,6 +246,7 @@
 			}
 		</script>
 		<form id="form1" method="GET">
+		<div class="container"> 
 			<label><b>Statement Type:</b></label>
 			<select name="adminQuery">
 				<option value="INSERT">Insert entry</option>
@@ -291,6 +326,7 @@
 			<input type="number" name="year" placeholder="..."><br>
 
 			<input type="submit" value="Execute Query">
+		</div> 
 		</form>
 		<script>
 			queryInput();
