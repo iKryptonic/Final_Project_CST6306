@@ -16,143 +16,157 @@
 			// to connect on your device and for the right database.
 			include "db_connect.php";
 
-
-			if(isset($_GET['table']) && isset($_GET['adminQuery']))
-			{
-				$table = $_GET['table'];
-				$adminQ = $_GET['adminQuery'];
+		
+			// This will check if a php value is valid
+			function checkValue($val){
+				return (isset($val) && !empty($val)) ? $val : null;
 			}
-
-			if($table == "Student")
-			{
-				if($adminQ == "INSERT")
-				{
-
-				}
-				else if($adminQ == "DELETE")
-				{
-					
-				}
-				else if($adminQ == "UPDATE")
-				{
-					
-				}
+			
+			// Sanitize user input against HTML escapes
+			$table = htmlspecialchars($_GET['table']);
+			$adminQ = htmlspecialchars($_GET['adminQuery']);
+		
+			// request null check
+			if(!checkValue($table) || !checkValue($adminQ)){
+				die("Invalid request parameters. \n" . "Missing parameters" . 
+				   (!checkValue($table) ? "'table'\n" : "") .
+				   (!checkValue($adminQ) ? "'adminQ'\n" : "")
+				   );
 			}
-
+		
 			// I am very sure there is a less tedious manner of formulating these queries,
 			// I just have yet to hit upon it. The combinations of table and statement make
 			// for a good number. Stopped here in case the database portion can simplify this/save typing.
-			if($table == "Course")
-			{
-				
-				if($adminQ == "INSERT" && isset($_GET['cid']) && !empty($_GET['cid']) && isset($_GET['cname']) && !empty($_GET['cname']) && isset($_GET['meets_at']) && !empty($_GET['meets_at']) && isset($_GET['room']) && !empty($_GET['room']))
-				{
-					$cid = $_GET['cid'];
-					$cname = $_GET['cname'];
-					$meets_at = $_GET['meets_at'];
-					$room = $_GET['room'];
+		
+			// IS: Swapped if statements to switch for readability
+			switch($table){
+				case "Student": { // Table = Student
+						switch($adminQ){
+							case "INSERT":
+								break;
+							case "DELETE":
+								break;
+							case "UPDATE":
+								break;
+						}
+					}
+					break;
+					
+				case "Course": {// Table = Course
+						$cid = htmlspecialchars($_GET['cid']);
+						$cname = htmlspecialchars($_GET['cname']);
+						$meets_at = htmlspecialchars($_GET['meets_at']);
+						$room = htmlspecialchars($_GET['room']);
+						
+						switch($adminQ){
+							case "INSERT":	{		
+								if(!checkValue($cid) || !checkValue($cname) || !checkValue($meets_at) || !checkValue($room)){
+									die("Invalid query parameters. \n" . "Missing parameters" . 
+										(!checkValue($cid) ? "'cid'\n" : "") .
+										(!checkValue($cname) ? "'cname'\n" : "") .
+										(!checkValue($meets_at) ? "'meets_at'\n" : "") .
+										(!checkValue($room) ? "'room'\n" : "")
+									   );
+								}
+								$sql = "INSERT INTO `databaseNameHere`.`Course` 
+								(
+									`cid`, 
+									`cname`, 
+									`meets_at`, 
+									`room`
+								) 
+								VALUES 
+								(
+									".$cid.", 
+									'".$cname."', 
+									'".$meets_at."', 
+									'".$room."'
+								) 
+								ON DUPLICATE KEY UPDATE 
+									cid=".$cid.",
+									cname='".$cname."',
+									meets_at='".$meets_at."',
+									room='".$room."'";
 
-					$sql = "INSERT INTO `databaseNameHere`.`Course` 
-						(
-							`cid`, 
-							`cname`, 
-							`meets_at`, 
-							`room`
-						) 
-						VALUES 
-						(
-							".$cid.", 
-							'".$cname."', 
-							'".$meets_at."', 
-							'".$room."'
-						) 
-						ON DUPLICATE KEY UPDATE 
-							cid=".$cid.",
-							cname='".$cname."',
-							meets_at='".$meets_at."',
-							room='".$room."'";
+								$result = $mysqli->query($sql);
+							}
+								break;
+								
+							case "DELETE": {
+								if(!checkValue($cid)){
+									die("Invalid query parameters. \n" . "Missing parameters" . 
+										(!checkValue($cid) ? "'cid'\n" : "")
+									   );
+								}
+								$cid = $_GET['cid'];
 
-					$result = $mysqli->query($sql);
+								$sql = "DELETE FROM `databaseNameHere`.`Course` 
+									WHERE cid=".$cid;
 
-				}
-				else if($adminQ == "DELETE" && isset($_GET['cid']) && !empty($_GET['cid']))
-				{
-					$cid = $_GET['cid'];
+								$result = $mysqli->query($sql);
+							}
+								break;
+								
+							case "UPDATE": {
+								$cid = $_GET['cid'];
+								$cname = $_GET['cname'];
+								$meets_at = $_GET['meets_at'];
+								$room = $_GET['room'];
 
-					$sql = "DELETE FROM `databaseNameHere`.`Course` 
-						WHERE cid=".$cid;
+								$sql = "UPDATE `databaseNameHere`.`Course`  
+									SET 
+									( 
+										cname='".$cname."', 
+										meets_at='".$meets_at."', 
+										room='".$room."'
+									) 
+									WHERE
+										cid=".$cid;
 
-					$result = $mysqli->query($sql);
-				}
-				else if($adminQ == "UPDATE" && isset($_GET['cid']) && !empty($_GET['cid']) && isset($_GET['cname']) && !empty($_GET['cname']) && isset($_GET['meets_at']) && !empty($_GET['meets_at']) && isset($_GET['room']) && !empty($_GET['room']))
-				{
-					$cid = $_GET['cid'];
-					$cname = $_GET['cname'];
-					$meets_at = $_GET['meets_at'];
-					$room = $_GET['room'];
-
-					$sql = "UPDATE `databaseNameHere`.`Course`  
-						SET 
-						( 
-							cname='".$cname."', 
-							meets_at='".$meets_at."', 
-							room='".$room."'
-						) 
-						WHERE
-							cid=".$cid;
-
-					$result = $mysqli->query($sql);
-				}
+								$result = $mysqli->query($sql);
+							}
+								break;
+						}
+					}
+					break;
+					
+				case "Enrolled": {// Table = Enrolled
+						switch($adminQ){
+							case "INSERT":
+								break;
+							case "DELETE":
+								break;
+							case "UPDATE":
+								break;
+						}
+					}
+					break;
+					
+				case "Faculty": { // Table = Faculty
+						switch($adminQ){
+							case "INSERT":
+								break;
+							case "DELETE":
+								break;
+							case "UPDATE":
+								break;
+						}
+					}
+					break;
+					
+				case "Offered": {// Table = Enrolled
+						switch($adminQ){
+							case "INSERT":
+								break;
+							case "DELETE":
+								break;
+							case "UPDATE":
+								break;
+						}
+					}
+					break;
+					
 			}
-
-			if($table == "Enrolled")
-			{
-				if($adminQ == "INSERT")
-				{
-
-				}
-				else if($adminQ == "DELETE")
-				{
-					
-				}
-				else if($adminQ == "UPDATE")
-				{
-					
-				}
-			}
-
-			if($table == "Faculty")
-			{
-				if($adminQ == "INSERT")
-				{
-
-				}
-				else if($adminQ == "DELETE")
-				{
-					
-				}
-				else if($adminQ == "UPDATE")
-				{
-					
-				}
-			}
-
-			if($table == "Offered")
-			{
-				if($adminQ == "INSERT")
-				{
-
-				}
-				else if($adminQ == "DELETE")
-				{
-					
-				}
-				else if($adminQ == "UPDATE")
-				{
-					
-				}
-			}
-
 		?>
 		<script>
 			/*This script basically is just making sure you only see 
