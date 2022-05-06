@@ -2,7 +2,41 @@
 <html>
 	<head>
 		<title>dbQueries</title>
+		<style> 
+			Body {
+				font-family: Calibri, Helvetica, sans-serif;
+				background-color: white;
+			}
+			form { 
+				border: 3px solid #f1f1f1; 
+			}
+			input[type=text] { 
+				width: 100%; 
+				margin: 8px 0;
+				padding: 12px 20px; 
+				display: inline-block; 
+				border: 2px solid green; 
+				box-sizing: border-box; 
+			}
+			input[type=submit] { 
+				background-color: #4CAF50; 
+				width: 100%;
+				color: white; 
+				padding: 15px; 
+				margin: 10px 0px; 
+				border: none; 
+				cursor: pointer; 
+			}
+			input[type=submit]:hover { 
+				opacity: 0.7; 
+			}	
+			.container { 
+				padding: 25px; 
+				background-color: lightblue;
+			}
+		</style>
 	</head>
+	<h1> CS Course Management System </h1>
 	<body>
 		<?php
 			// connects to a database for me, but will need to be edited
@@ -116,6 +150,7 @@
 		?>
 
 		<form id="form1" method="GET">
+			<div class="container">
 				<input type="text" name="sname" placeholder="Enter Student Name..."><br>
 				<input type="text" name="fname" placeholder="Enter Faculty Name..."><br>
 				<input type="text" name="cname" placeholder="Enter Course Name..."><br>
@@ -144,6 +179,7 @@
 
 
 				<input type="submit">
+			</div>
 		</form>
 	</body>
 </html>
