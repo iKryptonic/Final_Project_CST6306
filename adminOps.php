@@ -2,8 +2,43 @@
 <html>
 	<head>
 		<title>adminOps</title>
-	</head>
-	<body>
+		<style> 
+				Body {
+					font-family: Calibri, Helvetica, sans-serif;
+					background-color: white;
+				}
+				form { 
+					border: 3px solid #f1f1f1; 
+				}
+				input[type=text] { 
+					width: 100%; 
+					margin: 8px 0;
+					padding: 12px 20px; 
+					display: inline-block; 
+					border: 2px solid green; 
+					box-sizing: border-box; 
+				}
+				input[type=submit] { 
+					background-color: #4CAF50; 
+					width: 100%;
+					color: white; 
+					padding: 15px; 
+					margin: 10px 0px; 
+					border: none; 
+					cursor: pointer; 
+				}
+				input[type=submit]:hover { 
+					opacity: 0.7; 
+				}	
+				.container { 
+					padding: 25px; 
+					background-color: lightblue;
+				}
+			</style>
+		</head>
+	
+		<body>
+		<h1> CS Course Management System </h1>
 		<?php
 
 			/*I apologize in advance for how sloppy this code is,
@@ -194,87 +229,91 @@
 				}
 			}
 		</script>
-		<form id="form1" method="POST">
-			<label><b>Statement Type:</b></label>
-			<select name="adminQuery">
-				<option value="INSERT">Insert entry</option>
-				<option value="DELETE">Delete entry</option>
-				<option value="UPDATE">Update entry</option>
-			</select><br>
-			<label><b>Table:</b></label>
-			<select name="table">
-				<option value="Student">Student</option>
-				<option value="Course">Course</option>
-				<option value="Enrolled">Enrolled</option>
-				<option value="Faculty">Faculty</option>
-				<option value="Offered">Offered</option>
-			</select><br>
+			
+		<div class="container"> 
+			<form id="form1" method="POST">
+				<label><b>Statement Type:</b></label>
+				<select name="adminQuery">
+					<option value="INSERT">Insert entry</option>
+					<option value="DELETE">Delete entry</option>
+					<option value="UPDATE">Update entry</option>
+				</select><br>
+				<label><b>Table:</b></label>
+				<select name="table">
+					<option value="Student">Student</option>
+					<option value="Course">Course</option>
+					<option value="Enrolled">Enrolled</option>
+					<option value="Faculty">Faculty</option>
+					<option value="Offered">Offered</option>
+				</select><br>
 
-			<input type="submit">
-		</form>
+				<input type="submit">
+			</form>
 
-		<form id="studentForm" style="display:none;">
-			<label><b>sid:</b></label>
-			<input type="number" name="sid" placeholder="..."><br>
-			<label><b>sname:</b></label>
-			<input type="text" name="sname" placeholder="..."><br>
-			<label><b>major:</b></label>
-			<input type="text" name="major" placeholder="..."><br>
-			<label><b>level:</b></label>
-			<input type="text" name="level" placeholder="..."><br>
-			<label><b>byear:</b></label>
-			<input type="number" name="byear" placeholder="..."><br>
+			<form id="studentForm" style="display:none;">
+				<label><b>sid:</b></label>
+				<input type="number" name="sid" placeholder="..."><br>
+				<label><b>sname:</b></label>
+				<input type="text" name="sname" placeholder="..."><br>
+				<label><b>major:</b></label>
+				<input type="text" name="major" placeholder="..."><br>
+				<label><b>level:</b></label>
+				<input type="text" name="level" placeholder="..."><br>
+				<label><b>byear:</b></label>
+				<input type="number" name="byear" placeholder="..."><br>
 
-			<input type="submit" value="Execute Query">
-		</form>
+				<input type="submit" value="Execute Query">
+			</form>
 
-		<form id="courseForm" style="display:none;">
-			<label><b>cid:</b></label>
-			<input type="number" name="cid" placeholder="..."><br>
-			<label><b>cname:</b></label>
-			<input type="text" name="cname" placeholder="..."><br>
-			<label><b>meets_at:</b></label>
-			<input type="text" name="meets_at" placeholder="..."><br>
-			<label><b>room:</b></label>
-			<input type="text" name="room" placeholder="..."><br>
+			<form id="courseForm" style="display:none;">
+				<label><b>cid:</b></label>
+				<input type="number" name="cid" placeholder="..."><br>
+				<label><b>cname:</b></label>
+				<input type="text" name="cname" placeholder="..."><br>
+				<label><b>meets_at:</b></label>
+				<input type="text" name="meets_at" placeholder="..."><br>
+				<label><b>room:</b></label>
+				<input type="text" name="room" placeholder="..."><br>
 
-			<input type="submit" value="Execute Query">
-		</form>
+				<input type="submit" value="Execute Query">
+			</form>
 
-		<form id="enrolledForm" style="display:none;">
-			<label><b>sid:</b></label>
-			<input type="number" name="sid_e" placeholder="..."><br>
-			<label><b>oid:</b></label>
-			<input type="number" name="oid" placeholder="..."><br>
+			<form id="enrolledForm" style="display:none;">
+				<label><b>sid:</b></label>
+				<input type="number" name="sid_e" placeholder="..."><br>
+				<label><b>oid:</b></label>
+				<input type="number" name="oid" placeholder="..."><br>
 
-			<input type="submit" value="Execute Query">
-		</form>
+				<input type="submit" value="Execute Query">
+			</form>
 
-		<form id="facultyForm" style="display:none;">
-			<label><b>fid:</b></label>
-			<input type="number" name="fid" placeholder="..."><br>
-			<label><b>fname:</b></label>
-			<input type="text" name="fname" placeholder="..."><br>
-			<label><b>department:</b></label>
-			<input type="text" name="department" placeholder="..."><br>
+			<form id="facultyForm" style="display:none;">
+				<label><b>fid:</b></label>
+				<input type="number" name="fid" placeholder="..."><br>
+				<label><b>fname:</b></label>
+				<input type="text" name="fname" placeholder="..."><br>
+				<label><b>department:</b></label>
+				<input type="text" name="department" placeholder="..."><br>
 
-			<input type="submit" value="Execute Query">
-		</form>
+				<input type="submit" value="Execute Query">
+			</form>
 
-		<form id="offeredForm" style="display:none;">
-			<label><b>oid:</b></label>
-			<input type="number" name="oid_o" placeholder="..."><br>
-			<label><b>cid:</b></label>
-			<input type="number" name="cid_o" placeholder="..."><br>
-			<label><b>fid:</b></label>
-			<input type="number" name="fid_o" placeholder="..."><br>
-			<label><b>semester:</b></label>
-			<input type="text" name="semester" placeholder="..."><br>
-			<label><b>fid:</b></label>
-			<input type="number" name="year" placeholder="..."><br>
+			<form id="offeredForm" style="display:none;">
+				<label><b>oid:</b></label>
+				<input type="number" name="oid_o" placeholder="..."><br>
+				<label><b>cid:</b></label>
+				<input type="number" name="cid_o" placeholder="..."><br>
+				<label><b>fid:</b></label>
+				<input type="number" name="fid_o" placeholder="..."><br>
+				<label><b>semester:</b></label>
+				<input type="text" name="semester" placeholder="..."><br>
+				<label><b>fid:</b></label>
+				<input type="number" name="year" placeholder="..."><br>
 
-			<input type="submit" value="Execute Query">
-		</form>
+				<input type="submit" value="Execute Query">
+			</form>
+		</div>
+			
 		<script>
 			queryInput();
 		</script>
