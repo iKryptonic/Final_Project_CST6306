@@ -51,8 +51,8 @@
 				$sname = $_GET['sname'];
 				$semester = $_GET['semester'];
 				$sem_year = $_GET['semester_year'];
-				$sql = "h";// Need to insert query here, blank atm since I can't test it.
-				$result = $mysqli->query($sql);
+				$sql = "CALL `get_student_courses_by_semester`('$sname', '$semester', '$sem_year');";
+				$result = $conn->query($sql);
 
 				if($result->num_rows)
 				{
@@ -85,8 +85,8 @@
 				$fname = $_GET['fname'];
 				$semester = $_GET['semester'];
 				$sem_year = $_GET['semester_year'];
-				$sql = "h";// Need to insert query here, blank atm since I can't test it.
-				$result = $mysqli->query($sql);
+				$sql = "CALL `get_faculty_courses_by_semester`('$fname', '$semester', '$sem_year');";
+				$result = $conn->query($sql);
 
 				if($result->num_rows)
 				{
@@ -116,12 +116,16 @@
 			// Get all students enrolled in a specified course in a specified semester
 			if(isset($_GET['cname']) && !empty($_GET['cname']) && $_GET['queryType'] == 'query3')
 			{
-				$cname = $_GET['sname'];
+				ini_set('display_errors', 1); 
+				ini_set('display_startup_errors', 1); 
+				error_reporting(E_ALL);
+				$cname = $_GET['cname'];
 				$semester = $_GET['semester'];
-				$sem_year = $_GET['semester_year'];
-				$sql = "h";// Need to insert query here, blank atm since I can't test it.
-				$result = $mysqli->query($sql);
-
+				$sem_year = intval($_GET['semester_year']);
+				$sql = "CALL get_course_students_by_semester('$cname', '$semester', '$sem_year')";
+				
+				$result = $conn->query($sql);
+				
 				if($result->num_rows)
 				{
 					echo "<table style=\"padding-top:20px;\">
@@ -155,9 +159,9 @@
 				<input type="text" name="fname" placeholder="Enter Faculty Name..."><br>
 				<input type="text" name="cname" placeholder="Enter Course Name..."><br>
 				<select name="semester">
-					<option value="spring">Spring</option>
-					<option value="summer">Summer</option>
-					<option value="fall">Fall</option>
+					<option value="Spring">Spring</option>
+					<option value="Summer">Summer</option>
+					<option value="Fall">Fall</option>
 				</select><br>
 				<select name="semester_year">
 					<option value="2024">2024</option>
