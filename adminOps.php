@@ -2,41 +2,7 @@
 <html>
 	<head>
 		<title>adminOps</title>
-	<style> 
-			Body {
-				font-family: Calibri, Helvetica, sans-serif;
-				background-color: white;
-			}
-			form { 
-				border: 3px solid #f1f1f1; 
-			}
-			input[type=text] { 
-				width: 100%; 
-				margin: 8px 0;
-				padding: 12px 20px; 
-				display: inline-block; 
-				border: 2px solid green; 
-				box-sizing: border-box; 
-			}
-			input[type=submit] { 
-				background-color: #4CAF50; 
-				width: 100%;
-				color: white; 
-				padding: 15px; 
-				margin: 10px 0px; 
-				border: none; 
-				cursor: pointer; 
-			}
-			input[type=submit]:hover { 
-				opacity: 0.7; 
-			}	
-			.container { 
-				padding: 25px; 
-				background-color: lightblue;
-			}
-		</style>
 	</head>
-	<h1> CS Course Management System </h1>
 	<body>
 		<?php
 
@@ -57,11 +23,11 @@
 			}
 			
 			// Sanitize user input against HTML escapes
-			$table = htmlspecialchars($_GET['table']);
-			$adminQ = htmlspecialchars($_GET['adminQuery']);
+			$table = htmlspecialchars($_POST['table']);
+			$adminQ = htmlspecialchars($_POST['adminQuery']);
 		
 			// request null check
-			if(!checkValue($table) || !checkValue($adminQ)){
+			if((!checkValue($table) || !checkValue($adminQ)) && $_SERVER["REQUEST"]=="POST"){
 				die("Invalid request parameters. \n" . "Missing parameters" . 
 				   (!checkValue($table) ? "'table'\n" : "") .
 				   (!checkValue($adminQ) ? "'adminQ'\n" : "")
@@ -73,24 +39,15 @@
 			// for a good number. Stopped here in case the database portion can simplify this/save typing.
 		
 			// IS: Swapped if statements to switch for readability
+		
+			$sql = ""; // an empty query
+		
 			switch($table){
-				case "Student": { // Table = Student
-						switch($adminQ){
-							case "INSERT":
-								break;
-							case "DELETE":
-								break;
-							case "UPDATE":
-								break;
-						}
-					}
-					break;
-					
 				case "Course": {// Table = Course
-						$cid = htmlspecialchars($_GET['cid']);
-						$cname = htmlspecialchars($_GET['cname']);
-						$meets_at = htmlspecialchars($_GET['meets_at']);
-						$room = htmlspecialchars($_GET['room']);
+						$cid = htmlspecialchars($_POST['cid']);
+						$cname = htmlspecialchars($_POST['cname']);
+						$meets_at = htmlspecialchars($_POST['meets_at']);
+						$room = htmlspecialchars($_POST['room']);
 						
 						switch($adminQ){
 							case "INSERT":	{		
@@ -102,27 +59,7 @@
 										(!checkValue($room) ? "'room'\n" : "")
 									   );
 								}
-								$sql = "INSERT INTO `databaseNameHere`.`Course` 
-								(
-									`cid`, 
-									`cname`, 
-									`meets_at`, 
-									`room`
-								) 
-								VALUES 
-								(
-									".$cid.", 
-									'".$cname."', 
-									'".$meets_at."', 
-									'".$room."'
-								) 
-								ON DUPLICATE KEY UPDATE 
-									cid=".$cid.",
-									cname='".$cname."',
-									meets_at='".$meets_at."',
-									room='".$room."'";
-
-								$result = $mysqli->query($sql);
+								$sql = "CALL insert_course('$cname', '$meets_at', '$room')";
 							}
 								break;
 								
@@ -132,22 +69,20 @@
 										(!checkValue($cid) ? "'cid'\n" : "")
 									   );
 								}
-								$cid = $_GET['cid'];
+								$cid = $_POST['cid'];
 
-								$sql = "DELETE FROM `databaseNameHere`.`Course` 
+								$sql = "DELETE FROM Course 
 									WHERE cid=".$cid;
-
-								$result = $mysqli->query($sql);
 							}
 								break;
 								
 							case "UPDATE": {
-								$cid = $_GET['cid'];
-								$cname = $_GET['cname'];
-								$meets_at = $_GET['meets_at'];
-								$room = $_GET['room'];
+								$cid = $_POST['cid'];
+								$cname = $_POST['cname'];
+								$meets_at = $_POST['meets_at'];
+								$room = $_POST['room'];
 
-								$sql = "UPDATE `databaseNameHere`.`Course`  
+								$sql = "UPDATE Course
 									SET 
 									( 
 										cname='".$cname."', 
@@ -156,9 +91,19 @@
 									) 
 									WHERE
 										cid=".$cid;
-
-								$result = $mysqli->query($sql);
 							}
+								break;
+						}
+					}
+					break;
+					
+				case "Student": { // Table = Student
+						switch($adminQ){
+							case "INSERT":
+								break;
+							case "DELETE":
+								break;
+							case "UPDATE":
 								break;
 						}
 					}
@@ -200,6 +145,10 @@
 					}
 					break;
 					
+			}
+		
+			if(!empty($sql)){ // check if a query was found
+				$mysqli->query($sql);
 			}
 		?>
 		<script>
@@ -245,8 +194,7 @@
 				}
 			}
 		</script>
-		<form id="form1" method="GET">
-		<div class="container"> 
+		<form id="form1" method="POST">
 			<label><b>Statement Type:</b></label>
 			<select name="adminQuery">
 				<option value="INSERT">Insert entry</option>
@@ -326,7 +274,6 @@
 			<input type="number" name="year" placeholder="..."><br>
 
 			<input type="submit" value="Execute Query">
-		</div> 
 		</form>
 		<script>
 			queryInput();
