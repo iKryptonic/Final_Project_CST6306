@@ -1,0 +1,12 @@
+<?php
+	$database_host = "localhost"; // Database host
+	$database_username = "root"; // Database username
+	$database_password = ""; // Database password
+	$database_alias = "apartments"; // The name of the targeted database.
+
+    $conn = new mysqli($database_host, $database_username, $database_password, $database_alias);
+
+    if($conn->connect_errno > 0)    {
+		echo("<script>alert(\"Database connection could not be made :(\");</script>");
+	}
+?>
