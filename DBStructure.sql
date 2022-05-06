@@ -67,6 +67,43 @@ CREATE TABLE IF NOT EXISTS `Faculty` (
 /*!40000 ALTER TABLE `Faculty` DISABLE KEYS */;
 /*!40000 ALTER TABLE `Faculty` ENABLE KEYS */;
 
+-- Dumping structure for procedure cst6306.insert_admin
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `insert_admin`(
+	IN `username` varchar(100),
+	IN `passwd` varchar(100)
+)
+BEGIN 
+	INSERT INTO Administrator(`uid`, `username`, `password`)
+	VALUES(NULL, username, passwd);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure cst6306.insert_course
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `insert_course`(
+	IN `cname` varchar(100),
+	IN `meets_at` varchar(200),
+	IN `room` varchar(50)
+)
+BEGIN 
+	INSERT INTO Course(`cid`, `cname`, `meets_at`, `room`)
+	VALUES(NULL, cname, meets_at, room);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure cst6306.insert_faculty
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `insert_faculty`(
+	IN `fname` varchar(100),
+	IN `department` varchar(50)
+)
+BEGIN 
+	INSERT INTO Faculty(`fid`, `fname`, `department`)
+	VALUES(NULL, fname, department);
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure cst6306.insert_student
 DELIMITER //
 CREATE DEFINER=`ikrypto`@`%` PROCEDURE `insert_student`(
