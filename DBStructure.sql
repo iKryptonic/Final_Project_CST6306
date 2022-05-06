@@ -35,10 +35,13 @@ CREATE TABLE IF NOT EXISTS `Course` (
   `meets_at` varchar(200) NOT NULL,
   `room` varchar(50) NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table cst6306.Course: ~0 rows (approximately)
 /*!40000 ALTER TABLE `Course` DISABLE KEYS */;
+REPLACE INTO `Course` (`cid`, `cname`, `meets_at`, `room`) VALUES
+	(1, 'Probability and Statistics', 'MWF', '101'),
+	(2, 'Calculus I', 'TF', '305');
 /*!40000 ALTER TABLE `Course` ENABLE KEYS */;
 
 -- Dumping structure for table cst6306.Enrolled
@@ -61,11 +64,64 @@ CREATE TABLE IF NOT EXISTS `Faculty` (
   `fname` varchar(100) NOT NULL DEFAULT '0',
   `department` varchar(50) NOT NULL DEFAULT '0',
   PRIMARY KEY (`fid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table cst6306.Faculty: ~0 rows (approximately)
 /*!40000 ALTER TABLE `Faculty` DISABLE KEYS */;
+REPLACE INTO `Faculty` (`fid`, `fname`, `department`) VALUES
+	(1, 'Jon Ells', 'MAT');
 /*!40000 ALTER TABLE `Faculty` ENABLE KEYS */;
+
+-- Dumping structure for procedure cst6306.get_course_students_by_semester
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `get_course_students_by_semester`(
+	IN `course_id` INT,
+	IN `semester_year` VARCHAR(50)
+)
+BEGIN
+	# Get all students enrolled in a specified course in a specified semester
+	SELECT S.sid, S.sname 
+	FROM Student S, Course C, Offered O, Enrolled E
+	WHERE E.sid=S.sid
+	AND E.oid=O.oid
+	AND O.semester=semester_year
+	AND C.cid=course_id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure cst6306.get_faculty_courses_by_semester
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `get_faculty_courses_by_semester`(
+	IN `faculty_id` INT,
+	IN `semester_year` VARCHAR(50)
+)
+BEGIN
+	SELECT C.cid, C.cname 
+	FROM Faculty F, Course C, Offered O
+	WHERE O.fid=F.fid
+	AND O.cid=C.cid
+	AND F.fid=faculty_id
+	AND O.semester=semester_year;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure cst6306.get_student_courses_by_semester
+DELIMITER //
+CREATE DEFINER=`ikrypto`@`%` PROCEDURE `get_student_courses_by_semester`(
+	IN `student_id` INT,
+	IN `semester_year` VARCHAR(50)
+)
+BEGIN
+	# Get all courses taken by a specific student in a specified semester.
+	SELECT C.cid, C.cname 
+	FROM Student S, Course C, Offered O, Enrolled E
+	WHERE E.sid=S.sid AND
+		E.oid=O.oid AND
+		C.cid=O.cid AND
+		S.sid=student_id AND
+		O.semester=semester_year;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure cst6306.insert_admin
 DELIMITER //
@@ -128,7 +184,10 @@ CREATE TABLE IF NOT EXISTS `Offered` (
   `fid` int NOT NULL,
   `semester` varchar(10) NOT NULL,
   `year` int NOT NULL,
-  PRIMARY KEY (`oid`)
+  PRIMARY KEY (`oid`),
+  KEY `FK_Offered_Course` (`cid`),
+  CONSTRAINT `FK_Offered_Course` FOREIGN KEY (`cid`) REFERENCES `Course` (`cid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Offered_Enrolled` FOREIGN KEY (`oid`) REFERENCES `Enrolled` (`oid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table cst6306.Offered: ~0 rows (approximately)
