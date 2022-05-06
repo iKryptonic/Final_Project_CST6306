@@ -46,7 +46,7 @@
 			{
 				$adminUser = $_GET['username'];
 				$adminPass = $_GET['password'];
-				$sql = "SELECT * FROM administrators WHERE username='" . $adminUser . "' AND password='" . $adminPass . "'";
+				$sql = "SELECT * FROM administrator WHERE username='" . $adminUser . "' AND password='" . $adminPass . "'";
 				$result = $mysqli->query($sql);
 
 				if($result->num_rows)
