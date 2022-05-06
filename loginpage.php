@@ -39,8 +39,29 @@
 	</head> 
 	
 	<body>  
+		<?php
+			include "db_connect.php";
+
+			if(isset($_GET['username']) && isset($_GET['password']))
+			{
+				$adminUser = $_GET['username'];
+				$adminPass = $_GET['password'];
+				$sql = "SELECT * FROM administrators WHERE username='" . $adminUser . "' AND password='" . $adminPass . "'";
+				$result = $mysqli->query($sql);
+
+				if($result->num_rows)
+				{
+					header("location: adminOps.php");
+					exit();
+				}
+				else
+				{
+					echo "<script>alert(\"Sorry, we don't seem to have an administrator by that name stored here.\");</script>";
+				}
+			}
+		?>
 		<center><h1> Student Login Form </h1></center> 
-		<form>
+		<form id="form1" method="GET">
 			<div class="container"> 
 				<label>Username : </label> 
 				<input type="text" placeholder="Enter Username" name="username" required>
